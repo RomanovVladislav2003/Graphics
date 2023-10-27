@@ -1,0 +1,69 @@
+import pyglet
+from pyglet.gl import *
+from math import sin, cos, pi
+
+window_width = 800
+window_height = 400
+
+window = pyglet.window.Window(width=window_width, height=window_height, caption="Флаг Чили")
+
+def draw_white_stripe():
+    glColor3f(1.0, 1.0, 1.0)
+    glBegin(GL_QUADS)
+    glVertex2f(0, window_height)
+    glVertex2f(window_width, window_height)
+    glVertex2f(window_width, window_height / 2)
+    glVertex2f(0, window_height / 2)
+    glEnd()
+def draw_red_stripe():
+    glColor3f(1.0, 0.0, 0.0)
+    glBegin(GL_QUADS)
+    glVertex2f(0, window_height / 2)
+    glVertex2f(window_width, window_height / 2)
+    glVertex2f(window_width, 0)
+    glVertex2f(0, 0)
+    glEnd()
+def draw_blue_square():
+    glColor3f(0.0, 0.0, 1.0)
+    glBegin(GL_QUADS)
+    glVertex2f(0, window_height)
+    glVertex2f(window_width / 4, window_height)
+    glVertex2f(window_width / 4, window_height / 2)
+    glVertex2f(0, window_height / 2)
+    glEnd()
+def draw_star():
+    glColor3f(1.0, 1.0, 1.0)
+    num_points = 5
+    radius_outer = window_width / 16
+    radius_inner = radius_outer / 2.5
+    angle_offset = pi + 0.99  # начинаем с вертикальной точки
+    cx = window_width / 8 # расположение звезды по оси X
+    cy = 3 * window_height / 4 # расположение звезды по оси Y
+
+    glBegin(GL_TRIANGLE_FAN)
+    glVertex2f(cx, cy)  # центр звезды
+    for i in range(num_points * 2 + 1):
+        angle = i * pi / num_points + angle_offset
+        if i % 2 == 0:
+            x = cx + cos(angle) * radius_outer
+            y = cy + sin(angle) * radius_outer
+        else:
+            x = cx + cos(angle) * radius_inner
+            y = cy + sin(angle) * radius_inner
+        glVertex2f(x, y)
+    glEnd()
+
+@window.event
+def on_draw():
+    glClear(GL_COLOR_BUFFER_BIT)
+    glLoadIdentity()
+    draw_white_stripe()
+    draw_red_stripe()
+    draw_blue_square()
+    draw_star()
+
+def main():
+    pyglet.app.run()
+
+if __name__ == "__main__":
+    main()
